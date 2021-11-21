@@ -19,8 +19,10 @@ namespace CalibratableSonar {
     let minPuleTime = 0;
     let maxPuleTime = 0;
 
-    //% blockId=cs_initSonar block="initialize SONAR trig %trig|echo %echo|unit %unit| Calibrate %calibrate"
-    export function initSonar(trig: DigitalPin, echo: DigitalPin, unit: PingUnit, calibrate: Boolean, minCmDistance = 2, maxCmDistance = 500){
+    //% blockId=cs_initSonar block="initialize SONAR trig %trig|echo %echo| Calibrate %calibrate"
+    //% trig.defl=DigitalPin.P1
+    //% echo.defl=DigitalPin.P2
+    export function initSonar(trig: DigitalPin, echo: DigitalPin, calibrate: Boolean, minCmDistance = 2, maxCmDistance = 500){
         trigerPin = trig;
         echoPin = echo;
 
@@ -40,30 +42,9 @@ namespace CalibratableSonar {
         return pins.pulseIn(echoPin, PulseValue.High, maxduration);
     }
 
-    //% blockId=cs_getDistant block="get distant"
-    export function getDistant (): number{
-        return ping();
-    }
-
-    /**
-     * Send a ping and get the echo time (in microseconds) as a result
-     * @param trig tigger pin
-     * @param echo echo pin
-     * @param unit desired conversion unit
-     * @param maxCmDistance maximum distance in centimeters (default is 500)
-     */
-    //% blockId=sonar_ping block="ping trig %trig|echo %echo|unit %unit"
-    export function ping2(trig: DigitalPin, echo: DigitalPin, unit: PingUnit, maxCmDistance = 500): number {
-        // send pulse
-        pins.setPull(trig, PinPullMode.PullNone);
-        pins.digitalWritePin(trig, 0);
-        control.waitMicros(2);
-        pins.digitalWritePin(trig, 1);
-        control.waitMicros(10);
-        pins.digitalWritePin(trig, 0);
-
-        // read pulse
-        const d = pins.pulseIn(echo, PulseValue.High, maxCmDistance * 58);
+    //% blockId=cs_getDistant block="get distant unit %unit"
+    export function getDistant(unit: PingUnit): number{
+        const d = ping();
 
         switch (unit) {
             case PingUnit.Centimeters: return Math.idiv(d, 58);
@@ -71,4 +52,6 @@ namespace CalibratableSonar {
             default: return d;
         }
     }
+
+  
 }
