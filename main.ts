@@ -12,6 +12,19 @@ enum PingUnit {
  */
 //% color="#2c3e50" weight=10
 namespace CalibratableSonar {
+
+
+    let trigerPin = DigitalPin.P1;
+    let echoPin = DigitalPin.P2;
+
+    //% blockId=cs_initSonar block="Initialize trig %trig|echo %echo|unit %unit"
+    export function initSonar(trig: DigitalPin, echo: DigitalPin, unit: PingUnit, maxCmDistance = 500){
+        trigerPin = trig;
+        echoPin = echo;
+
+
+    }
+
     /**
      * Send a ping and get the echo time (in microseconds) as a result
      * @param trig tigger pin
