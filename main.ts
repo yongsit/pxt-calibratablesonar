@@ -33,15 +33,15 @@ namespace CalibratableSonar {
     //% blockId=cs_ping block="pingSONAR"
     export function ping (maxduration?: number): number{
         // send pulse
-        //pins.setPull(trigerPin, PinPullMode.PullNone);
-        pins.digitalWritePin(trigerPin, 0);
+        pins.setPull(trigerPin, PinPullMode.PullNone);
+        pins.digitalWritePin(DigitalPin.P1, 0);
         control.waitMicros(1000);
-        pins.digitalWritePin(trigerPin, 1);
+        pins.digitalWritePin(DigitalPin.P1, 1);
         control.waitMicros(10);
-        pins.digitalWritePin(trigerPin, 0);
+        pins.digitalWritePin(DigitalPin.P1, 0);
 
         // read pulse
-        return pins.pulseIn(echoPin, PulseValue.High, maxduration);
+        return pins.pulseIn(DigitalPin.P2, PulseValue.High, maxduration);
     }
 
     //% blockId=cs_getDistant block="get distant unit %unit"
