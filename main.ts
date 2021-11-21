@@ -84,13 +84,13 @@ namespace CalibratableSonar {
         let time: number = ping();
         let distant: number = 0;
 
-        if (time < minPuleTime || time < maxPuleTime) {
+        if (time < minPuleTime || time > maxPuleTime) {
             distant = estimatedDistantCM;
         }
         else
         {
             distant = Math.idiv(time, cmPulseTime);
-            estimatedDistantCM = (((100-gain)/100) * estimatedDistantCM) + ((gain/100)*(distant - estimatedDistantCM));
+            estimatedDistantCM = (((100-gain)/100) * estimatedDistantCM) + ((gain/100)*distant);
         }
 
         return estimatedDistantCM;
