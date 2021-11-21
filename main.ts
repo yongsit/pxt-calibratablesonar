@@ -14,6 +14,7 @@ namespace CalibratableSonar {
     let maxPuleTime: number = maximumDistantCM * cmPulseTime;
     let standardDiviationCM: number = 10;
     let estimatedDistantCM: number = 0;
+    let rawDistantCM: number = 0;
 
     //% blockId=cs_initSonar block="initialize SONAR trig %trig|echo %echo| calibrate distant %calDist"
     //% trig.defl=DigitalPin.P1
@@ -78,7 +79,7 @@ namespace CalibratableSonar {
     }
 
     //% blockId=cs_getDistant block="get distant gain %gain"
-    //% gain.defl=0.2 gain.min=0.01 gain.max=1.00
+    //% gain.defl=20 gain.min=1 gain.max=100
     //% group="Reading"
     export function getDistant(gain: number): number{
         let time: number = ping();
@@ -90,12 +91,17 @@ namespace CalibratableSonar {
         else
         {
             distant = Math.idiv(time, cmPulseTime);
-            estimatedDistantCM = ((1 - gain) * estimatedDistantCM) + (gain * distant);
+            estimatedDistantCM = ((100 - gain) * estimatedDistantCM / 100) + (gain * distant / 100);
         }
 
+        rawDistantCM = distant;
         return estimatedDistantCM;
     }
     
    
-  
+    //% blockId=cs_getRawDistant block="get raw distant"
+    //% group="Reading"
+    export function getRawDistant(gain: number): number {
+        return rawDistantCM;
+    }
 }
