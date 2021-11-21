@@ -101,7 +101,7 @@ namespace CalibratableSonar {
    
     //% blockId=cs_getRawDistant block="get raw distant"
     //% group="Reading"
-    export function getRawDistant(gain: number): number {
+    export function getRawDistant(): number {
         return rawDistantCM;
     }
 }
