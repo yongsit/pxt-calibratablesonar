@@ -1,7 +1,7 @@
 /**
  * Sonar and ping utilities
  */
-//% color="#18bef5" icon="\u2687
+//% color="#18bef5" icon="\u2607
 namespace CalibratableSonar {
 
     const minimumDistantCM: number = 2;
