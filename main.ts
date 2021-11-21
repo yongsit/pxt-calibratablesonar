@@ -30,9 +30,10 @@ namespace CalibratableSonar {
 
     }
 
-    function ping (maxduration?: number): number{
+    //% blockId=cs_ping block="pingSONAR"
+    export function ping (maxduration?: number): number{
         // send pulse
-        pins.setPull(trigerPin, PinPullMode.PullNone);
+        //pins.setPull(trigerPin, PinPullMode.PullNone);
         pins.digitalWritePin(trigerPin, 0);
         control.waitMicros(1000);
         pins.digitalWritePin(trigerPin, 1);
