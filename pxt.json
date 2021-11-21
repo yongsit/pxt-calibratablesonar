@@ -2,11 +2,9 @@
     "name": "pxt-calibratableSonar",
     "description": "",
     "dependencies": {
-        "core": "*",
-        "microphone": "*"
+        "core": "*"
     },
     "files": [
-        "main.blocks",
         "main.ts",
         "README.md"
     ],
