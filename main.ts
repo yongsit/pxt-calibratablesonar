@@ -77,8 +77,8 @@ namespace CalibratableSonar {
         return pins.pulseIn(echoPin, PulseValue.High, maxPuleTime);
     }
 
-    //% blockId=cs_getDistant block="get distant unit %unit| gain %gain"
-    //% gain.defl=80 gain.min=1 gain.max=100
+    //% blockId=cs_getDistant block="get distant gain %gain"
+    //% gain.defl=0.2 gain.min=0.01 gain.max=1.00
     //% group="Reading"
     export function getDistant(gain: number): number{
         let time: number = ping();
@@ -90,7 +90,7 @@ namespace CalibratableSonar {
         else
         {
             distant = Math.idiv(time, cmPulseTime);
-            estimatedDistantCM = (((100-gain)/100) * estimatedDistantCM) + ((gain/100)*distant);
+            estimatedDistantCM = ((1 - gain) * estimatedDistantCM) + (gain * distant);
         }
 
         return estimatedDistantCM;
