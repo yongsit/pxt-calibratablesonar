@@ -1,12 +1,3 @@
-enum PingUnit {
-    //% block="μs"
-    MicroSeconds,
-    //% block="cm"
-    Centimeters,
-    //% block="inches"
-    Inches
-}
-
 /**
  * Sonar and ping utilities
  */
@@ -22,11 +13,12 @@ namespace CalibratableSonar {
     let minPuleTime: number = minimumDistantCM * cmPulseTime;
     let maxPuleTime: number = maximumDistantCM * cmPulseTime;
     let standardDiviationCM: number = 10;
+    let estimatedDistantCM: number = 0;
 
     //% blockId=cs_initSonar block="initialize SONAR trig %trig|echo %echo| calibrate distant %calDist"
     //% trig.defl=DigitalPin.P1
     //% echo.defl=DigitalPin.P2
-    //% calibrateDist.defl=0
+    //% calDist.defl=0
     //% group="Initializing"
     export function initSonar(trig: DigitalPin, echo: DigitalPin, calDist: number){
         trigerPin = trig;
@@ -36,11 +28,14 @@ namespace CalibratableSonar {
             calibrateSonar(calDist);
         }
 
+        basic.showNumber(cmPulseTime);
+        basic.showNumber(standardDiviationCM);
+
         minPuleTime = minimumDistantCM * cmPulseTime;
         maxPuleTime = maximumDistantCM * cmPulseTime;
     }
 
-    function calibrateSonar(calDist: number, minCmDistance: number = 2, maxCmDistance: number = 500)
+    function calibrateSonar(calDist: number)
     {
         const calibrateSlot = 100;
         let i: number = 0;
@@ -59,20 +54,16 @@ namespace CalibratableSonar {
         // Update pluse time per CM.
         avg = Math.floor(avg);
         cmPulseTime = Math.floor(avg / calDist);
-        basic.showNumber(cmPulseTime);
-
+        
         // Calulate standard diviation 
         for (i = 0; i < calibrateSlot; i++) {
             sdAvg += (Math.pow((times[i] - avg), 2) - sdAvg) / (i + 1);
         }
         sdAvg = Math.floor(Math.sqrt(sdAvg)) ;
         standardDiviationCM = sdAvg / cmPulseTime;
-
-        basic.showNumber(standardDiviationCM);
     }
 
 
- 
     function ping (): number{
         // send pulse
         pins.setPull(trigerPin, PinPullMode.PullNone);
@@ -86,16 +77,23 @@ namespace CalibratableSonar {
         return pins.pulseIn(echoPin, PulseValue.High, maxPuleTime);
     }
 
-    //% blockId=cs_getDistant block="get distant unit %unit"
+    //% blockId=cs_getDistant block="get distant unit %unit| gain %gain"
+    //% gain.defl=80 gain.min=1 gain.max=100
     //% group="Reading"
-    export function getDistant(unit: PingUnit): number{
-        const d = ping();
+    export function getDistant(gain: number): number{
+        let time: number = ping();
+        let distant: number = 0;
 
-        switch (unit) {
-            case PingUnit.Centimeters: return Math.idiv(d, 58);
-            case PingUnit.Inches: return Math.idiv(d, 148);
-            default: return d;
+        if (time < minPuleTime || time < maxPuleTime) {
+            distant = estimatedDistantCM;
         }
+        else
+        {
+            distant = Math.idiv(time, cmPulseTime);
+            estimatedDistantCM = (((100-gain)/100) * estimatedDistantCM) + ((gain/100)*(distant - estimatedDistantCM));
+        }
+
+        return estimatedDistantCM;
     }
     
    
