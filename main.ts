@@ -1,7 +1,7 @@
 /**
  * Sonar and ping utilities
  */
-//% color="#2c3e50" weight=10
+//% color="#18bef5" icon="\u2687
 namespace CalibratableSonar {
 
     const minimumDistantCM: number = 2;
@@ -54,13 +54,13 @@ namespace CalibratableSonar {
 
         // Update pluse time per CM.
         avg = Math.floor(avg);
-        cmPulseTime = Math.floor(avg / calDist);
+        cmPulseTime = avg / calDist;
         
         // Calulate standard diviation 
         for (i = 0; i < calibrateSlot; i++) {
             sdAvg += (Math.pow((times[i] - avg), 2) - sdAvg) / (i + 1);
         }
-        sdAvg = Math.floor(Math.sqrt(sdAvg)) ;
+        sdAvg = Math.sqrt(sdAvg);
         standardDiviationCM = sdAvg / cmPulseTime;
     }
 
