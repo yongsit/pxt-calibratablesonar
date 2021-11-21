@@ -22,7 +22,7 @@ namespace CalibratableSonar {
     //% blockId=cs_initSonar block="initialize SONAR trig %trig|echo %echo| Calibrate %calibrate"
     //% trig.defl=DigitalPin.P1
     //% echo.defl=DigitalPin.P2
-    //% calibrate.defl=true
+    
     export function initSonar(trig: DigitalPin, echo: DigitalPin, calibrate: Boolean, minCmDistance = 2, maxCmDistance = 500){
         trigerPin = trig;
         echoPin = echo;
