@@ -41,7 +41,8 @@ namespace CalibratableSonar {
         pins.digitalWritePin(DigitalPin.P1, 0);
 
         // read pulse
-        return pins.pulseIn(DigitalPin.P2, PulseValue.High, maxduration);
+        const d =  pins.pulseIn(DigitalPin.P2, PulseValue.High, maxduration);
+        return d;
     }
 
     //% blockId=cs_getDistant block="get distant unit %unit"
