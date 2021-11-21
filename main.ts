@@ -1,7 +1,9 @@
 /**
  * Sonar and ping utilities
  */
-//% color="#18bef5" icon="\u2607
+
+
+//% color="#ff0000" icon="\uf0a4"
 namespace CalibratableSonar {
 
     const minimumDistantCM: number = 2;
@@ -50,6 +52,7 @@ namespace CalibratableSonar {
             let time = ping();
             times.push(time);
             avg += (time - avg) / (i + 1);
+            led.plotBarGraph( i+1, 100);
         }
 
         // Update pluse time per CM.
@@ -64,8 +67,9 @@ namespace CalibratableSonar {
         standardDiviationCM = sdAvg / cmPulseTime;
     }
 
-
-    function ping (): number{
+    //% blockId=cs_getTime block="get time (μs)"
+    //% group="Reading"
+    export function ping (): number{
         // send pulse
         pins.setPull(trigerPin, PinPullMode.PullNone);
         pins.digitalWritePin(trigerPin, 0);
@@ -104,4 +108,5 @@ namespace CalibratableSonar {
     export function getRawDistant(): number {
         return rawDistantCM;
     }
+
 }
