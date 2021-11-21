@@ -22,6 +22,7 @@ namespace CalibratableSonar {
     //% blockId=cs_initSonar block="initialize SONAR trig %trig|echo %echo| Calibrate %calibrate"
     //% trig.defl=DigitalPin.P1
     //% echo.defl=DigitalPin.P2
+    //% calibrate.defl=true
     export function initSonar(trig: DigitalPin, echo: DigitalPin, calibrate: Boolean, minCmDistance = 2, maxCmDistance = 500){
         trigerPin = trig;
         echoPin = echo;
@@ -33,7 +34,7 @@ namespace CalibratableSonar {
         // send pulse
         pins.setPull(trigerPin, PinPullMode.PullNone);
         pins.digitalWritePin(trigerPin, 0);
-        control.waitMicros(50);
+        control.waitMicros(1000);
         pins.digitalWritePin(trigerPin, 1);
         control.waitMicros(10);
         pins.digitalWritePin(trigerPin, 0);
