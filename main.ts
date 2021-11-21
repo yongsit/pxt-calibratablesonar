@@ -16,13 +16,33 @@ namespace CalibratableSonar {
 
     let trigerPin = DigitalPin.P1;
     let echoPin = DigitalPin.P2;
+    let minPuleTime = 0;
+    let maxPuleTime = 0;
 
-    //% blockId=cs_initSonar block="Initialize trig %trig|echo %echo|unit %unit"
-    export function initSonar(trig: DigitalPin, echo: DigitalPin, unit: PingUnit, maxCmDistance = 500){
+    //% blockId=cs_initSonar block="initialize SONAR trig %trig|echo %echo|unit %unit| Calibrate %calibrate"
+    export function initSonar(trig: DigitalPin, echo: DigitalPin, unit: PingUnit, calibrate: Boolean, minCmDistance = 2, maxCmDistance = 500){
         trigerPin = trig;
         echoPin = echo;
 
 
+    }
+
+    function ping (maxduration?: number): number{
+        // send pulse
+        pins.setPull(trigerPin, PinPullMode.PullNone);
+        pins.digitalWritePin(trigerPin, 0);
+        control.waitMicros(50);
+        pins.digitalWritePin(trigerPin, 1);
+        control.waitMicros(10);
+        pins.digitalWritePin(trigerPin, 0);
+
+        // read pulse
+        return pins.pulseIn(echoPin, PulseValue.High, maxduration);
+    }
+
+    //% blockId=cs_getDistant block="get distant"
+    export function getDistant (): number{
+        return ping();
     }
 
     /**
@@ -33,7 +53,7 @@ namespace CalibratableSonar {
      * @param maxCmDistance maximum distance in centimeters (default is 500)
      */
     //% blockId=sonar_ping block="ping trig %trig|echo %echo|unit %unit"
-    export function ping(trig: DigitalPin, echo: DigitalPin, unit: PingUnit, maxCmDistance = 500): number {
+    export function ping2(trig: DigitalPin, echo: DigitalPin, unit: PingUnit, maxCmDistance = 500): number {
         // send pulse
         pins.setPull(trig, PinPullMode.PullNone);
         pins.digitalWritePin(trig, 0);
