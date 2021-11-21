@@ -34,14 +34,14 @@ namespace CalibratableSonar {
     export function ping (maxduration?: number): number{
         // send pulse
         pins.setPull(trigerPin, PinPullMode.PullNone);
-        pins.digitalWritePin(DigitalPin.P1, 0);
+        pins.digitalWritePin(trigerPin, 0);
         control.waitMicros(1000);
-        pins.digitalWritePin(DigitalPin.P1, 1);
+        pins.digitalWritePin(trigerPin, 1);
         control.waitMicros(10);
-        pins.digitalWritePin(DigitalPin.P1, 0);
+        pins.digitalWritePin(trigerPin, 0);
 
         // read pulse
-        const d =  pins.pulseIn(DigitalPin.P2, PulseValue.High, maxduration);
+        const d = pins.pulseIn(echoPin, PulseValue.High, (500*58));
         return d;
     }
 
